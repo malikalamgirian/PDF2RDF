@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -29,57 +29,50 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 
 /**
- * This is an example on how to get some x/y coordinates of text.
+ * This class will extract title from the given PDF
  *
  * @author Wasif Altaf, Ben Litchfield
  */
 public class TitleExtractor extends PDFTextStripper {
 
     private String fileNamePathWithExtension;
-    private Hashtable<String, List<TextPosition>> title;
+    private LinkedHashMap<String, List<TextPosition>> title;
     private boolean titleStartFlag = false,
             titleEndFlag = false;
 
     public TitleExtractor(String fileNamePathWithExtension) throws IOException {
         this.fileNamePathWithExtension = fileNamePathWithExtension;
-        title = new Hashtable<>();
-        //this.process();
+        title = new LinkedHashMap<>(30);
     }
 
     public TitleExtractor() throws IOException {
-        title = new Hashtable<>();
-        //this.process();
+        title = new LinkedHashMap<>();
     }
 
-    private boolean process() {
+    private boolean process() throws IOException {
         boolean toReturn = false;
+        PDFTextStripper stripper = new TitleExtractor();
+        PDDocument document = null;
 
         try {
-            PDDocument document = null;
+            document = PDDocument.load(new File(this.getFileNamePathWithExtension()));
 
-            try {
-                document = PDDocument.load(new File(this.fileNamePathWithExtension));
+            //((TitleExtractor) stripper).setFileNamePathWithExtension(this.getFileNamePathWithExtension());
+            stripper.setSortByPosition(true);
+            stripper.setStartPage(0);
+            stripper.setEndPage(1);
 
-                PDFTextStripper stripper = new TitleExtractor();
-                stripper.setSortByPosition(true);
-                stripper.setStartPage(0);
-                stripper.setEndPage(document.getNumberOfPages());
-
-                Writer dummy = new OutputStreamWriter(new ByteArrayOutputStream());
-                stripper.writeText(document, dummy);
-            } finally {
-                if (document != null) {
-                    document.close();
-                }
-            }
-
-            System.out.println(this.getTitleAsString());
+            Writer dummy = new OutputStreamWriter(new ByteArrayOutputStream());
+            stripper.writeText(document, dummy);
+            
+            setTitle(((TitleExtractor) stripper).getTitle());
 
             toReturn = true;
-        } catch (Exception e) {
-            toReturn = false;
+        } finally {
+            if (document != null) {
+                document.close();
+            }
         }
-
         return toReturn;
     }
 
@@ -94,17 +87,22 @@ public class TitleExtractor extends PDFTextStripper {
 
         // if text size is 14 and title not started yet, then mark start of title
         if (textPositions.get(0).getFontSizeInPt() == 14.0 && this.titleStartFlag == false) {
-            titleStartFlag = true;
+            this.titleStartFlag = true;
             // set string into title map
             title.put(string, textPositions);
+
+            //System.out.println(getMapAsString(title));
         } else if (textPositions.get(0).getFontSizeInPt() == 14.0 && this.titleStartFlag == true) {
             // set string into title map
             title.put(string, textPositions);
+
+            //System.out.println(getMapAsString(title));
         } // if string size is less than
         else if (textPositions.get(0).getFontSizeInPt() < 14.0) {
             // mark the end of title
-            titleEndFlag = true;
+            this.titleEndFlag = true;
         }
+        // 
 
 //        for (TextPosition text : textPositions) {
 //            System.out.println("String[" + text.getXDirAdj() + ", " + text.getYDirAdj()
@@ -118,25 +116,29 @@ public class TitleExtractor extends PDFTextStripper {
 //                    + "]" + text.getUnicode()
 //            );
 //        }
-        System.out.println(string);
-        System.out.println("\n");
+        //System.out.println(string);
+        //System.out.println("\n");
     }
 
     /**
      *
+     * @return the title as String
      */
-    private static void usage() {
-        System.err.println("Usage: java " + TitleExtractor.class.getName() + " <input-pdf>");
+    public String getTitleAsString() throws IOException {        
+        process();        
+
+        return getMapAsString(this.getTitle());
     }
 
     /**
-     *
-     * @return
+     * 
+     * @param map
+     * @return 
      */
-    public String getTitleAsString() {
+    private String getMapAsString(LinkedHashMap<String, List<TextPosition>> map) {
         StringBuffer sb = new StringBuffer();
 
-        for (Map.Entry<String, List<TextPosition>> entry : title.entrySet()) {
+        for (Map.Entry<String, List<TextPosition>> entry : map.entrySet()) {
             String word = entry.getKey();
             List<TextPosition> positions = entry.getValue();
 
@@ -147,35 +149,6 @@ public class TitleExtractor extends PDFTextStripper {
         return sb.toString().trim();
     }
 
-    public static void main(String[] args) throws IOException {
-        PDFTextStripper stripper = new TitleExtractor();
-        
-        if (args.length == 0) {
-            usage();
-        } else if (args.length == 1) {
-            PDDocument document = null;
-            try {
-                document = PDDocument.load(new File(args[0]));
-                
-                ((TitleExtractor)stripper).setFileNamePathWithExtension(args[0]);                
-                stripper.setSortByPosition(true);
-                stripper.setStartPage(0);
-                stripper.setEndPage(document.getNumberOfPages());
-
-                Writer dummy = new OutputStreamWriter(new ByteArrayOutputStream());
-                stripper.writeText(document, dummy);
-            } finally {
-                if (document != null) {
-                    document.close();
-                }
-            }
-            
-            System.out.println(((TitleExtractor)stripper).getTitleAsString());
-        }
-
-        //new TitleExtractor("D:\\bonn\\courses\\labEnterpriseInformationSystems\\niklas\\firstMeeting\\test.pdf");
-    }
-
     public String getFileNamePathWithExtension() {
         return fileNamePathWithExtension;
     }
@@ -183,4 +156,15 @@ public class TitleExtractor extends PDFTextStripper {
     public void setFileNamePathWithExtension(String fileNamePathWithExtension) {
         this.fileNamePathWithExtension = fileNamePathWithExtension;
     }
+
+    public LinkedHashMap<String, List<TextPosition>> getTitle() {
+        return title;
+    }
+
+    public void setTitle(LinkedHashMap<String, List<TextPosition>> title) {
+        this.title = title;
+    }
+    
+    
+    
 }
