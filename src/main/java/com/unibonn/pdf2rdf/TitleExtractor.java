@@ -104,20 +104,20 @@ public class TitleExtractor extends PDFTextStripper {
         }
          
 
-        for (TextPosition text : textPositions) {
-            System.out.println("String[" + text.getXDirAdj() + ", " + text.getYDirAdj()
-                    + " fs=" + text.getFontSize()
-                    + " xscale=" + text.getXScale()
-                    + " height=" + text.getHeightDir()
-                    + " space=" + text.getWidthOfSpace()
-                    + " width=" + text.getWidthDirAdj()
-                    + " font=" + text.getFont().toString()
-                    + " fontSizeInPT=" + text.getFontSizeInPt()
-                    + "]" + text.getUnicode()
-            );
-        }
-        System.out.println(string);
-        System.out.println("\n");
+//        for (TextPosition text : textPositions) {
+//            System.out.println("String[" + text.getXDirAdj() + ", " + text.getYDirAdj()
+//                    + " fs=" + text.getFontSize()
+//                    + " xscale=" + text.getXScale()
+//                    + " height=" + text.getHeightDir()
+//                    + " space=" + text.getWidthOfSpace()
+//                    + " width=" + text.getWidthDirAdj()
+//                    + " font=" + text.getFont().toString()
+//                    + " fontSizeInPT=" + text.getFontSizeInPt()
+//                    + "]" + text.getUnicode()
+//            );
+//        }
+//        System.out.println(string);
+//        System.out.println("\n");
     }
 
     /**
