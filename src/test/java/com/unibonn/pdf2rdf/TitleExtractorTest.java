@@ -58,5 +58,16 @@ public class TitleExtractorTest {
         
         assertEquals(expResult, result);
         
+        instance = new TitleExtractor();
+        fileNamePathWithExtension = "D:\\bonn\\courses\\"
+                + "labEnterpriseInformationSystems\\research\\springerFormat\\"
+                + "splnproc1703\\"
+                + "splnproc1703.pdf";                
+        expResult = "Contribution Title";
+        instance.setFileNamePathWithExtension(fileNamePathWithExtension);
+        result = instance.getTitleAsString();
+        
+        assertEquals(expResult, result);
+        
     }
 }

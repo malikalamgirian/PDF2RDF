@@ -91,33 +91,33 @@ public class TitleExtractor extends PDFTextStripper {
             // set string into title map
             title.put(string, textPositions);
 
-            //System.out.println(getMapAsString(title));
+            System.out.println(getMapAsString(title));
         } else if (textPositions.get(0).getFontSizeInPt() == 14.0 && this.titleStartFlag == true) {
             // set string into title map
             title.put(string, textPositions);
 
-            //System.out.println(getMapAsString(title));
+            System.out.println(getMapAsString(title));
         } // if string size is less than
         else if (textPositions.get(0).getFontSizeInPt() < 14.0) {
             // mark the end of title
             this.titleEndFlag = true;
         }
-        // 
+         
 
-//        for (TextPosition text : textPositions) {
-//            System.out.println("String[" + text.getXDirAdj() + ", " + text.getYDirAdj()
-//                    + " fs=" + text.getFontSize()
-//                    + " xscale=" + text.getXScale()
-//                    + " height=" + text.getHeightDir()
-//                    + " space=" + text.getWidthOfSpace()
-//                    + " width=" + text.getWidthDirAdj()
-//                    + " font=" + text.getFont().toString()
-//                    + " fontSizeInPT=" + text.getFontSizeInPt()
-//                    + "]" + text.getUnicode()
-//            );
-//        }
-        //System.out.println(string);
-        //System.out.println("\n");
+        for (TextPosition text : textPositions) {
+            System.out.println("String[" + text.getXDirAdj() + ", " + text.getYDirAdj()
+                    + " fs=" + text.getFontSize()
+                    + " xscale=" + text.getXScale()
+                    + " height=" + text.getHeightDir()
+                    + " space=" + text.getWidthOfSpace()
+                    + " width=" + text.getWidthDirAdj()
+                    + " font=" + text.getFont().toString()
+                    + " fontSizeInPT=" + text.getFontSizeInPt()
+                    + "]" + text.getUnicode()
+            );
+        }
+        System.out.println(string);
+        System.out.println("\n");
     }
 
     /**
@@ -164,7 +164,5 @@ public class TitleExtractor extends PDFTextStripper {
     public void setTitle(LinkedHashMap<String, List<TextPosition>> title) {
         this.title = title;
     }
-    
-    
     
 }
