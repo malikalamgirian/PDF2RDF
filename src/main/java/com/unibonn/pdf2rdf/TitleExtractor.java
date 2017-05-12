@@ -40,10 +40,10 @@ public class TitleExtractor extends PDFTextStripper {
     private boolean titleStartFlag = false,
             titleEndFlag = false;
 
-    public TitleExtractor(String fileNamePathWithExtension) throws IOException {
-        this.fileNamePathWithExtension = fileNamePathWithExtension;
-        title = new LinkedHashMap<>(30);
-    }
+//    public TitleExtractor(String fileNamePathWithExtension) throws IOException {
+//        this.fileNamePathWithExtension = fileNamePathWithExtension;
+//        title = new LinkedHashMap<>(30);
+//    }
 
     public TitleExtractor() throws IOException {
         title = new LinkedHashMap<>();

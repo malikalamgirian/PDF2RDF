@@ -47,14 +47,16 @@ public class TitleExtractorTest {
     @org.junit.Test
     public void testGetTitleAsString() throws IOException {
         System.out.println("getTitleAsString");
+        
+        TitleExtractor instance = new TitleExtractor();
         String fileNamePathWithExtension = "D:\\bonn\\courses\\"
                 + "labEnterpriseInformationSystems\\niklas\\firstMeeting\\"
-                + "test.pdf";
-        TitleExtractor instance = new TitleExtractor(fileNamePathWithExtension);
-        
+                + "test.pdf";                
         String expResult = "Structuring Linked Data Search Results Using Probabilistic Soft Logic";
+        instance.setFileNamePathWithExtension(fileNamePathWithExtension);
         String result = instance.getTitleAsString();
         
         assertEquals(expResult, result);
+        
     }
 }
