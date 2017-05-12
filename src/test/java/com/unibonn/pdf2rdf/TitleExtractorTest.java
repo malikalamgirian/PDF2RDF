@@ -20,26 +20,25 @@ import static org.junit.Assert.*;
  * @author Wasif Altaf
  */
 public class TitleExtractorTest {
-    
+
     public TitleExtractorTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
-
 
     /**
      * Test of getTitleAsString method, of class TitleExtractor.
@@ -47,27 +46,24 @@ public class TitleExtractorTest {
     @org.junit.Test
     public void testGetTitleAsString() throws IOException {
         System.out.println("getTitleAsString");
-        
+
         TitleExtractor instance = new TitleExtractor();
-        String fileNamePathWithExtension = "D:\\bonn\\courses\\"
-                + "labEnterpriseInformationSystems\\niklas\\firstMeeting\\"
-                + "test.pdf";                
+        String fileNamePathWithExtension = "src\\test\\java\\com\\unibonn\\pdf2rdf\\" 
+                + "test.pdf";
         String expResult = "Structuring Linked Data Search Results Using Probabilistic Soft Logic";
         instance.setFileNamePathWithExtension(fileNamePathWithExtension);
         String result = instance.getTitleAsString();
-        
+
         assertEquals(expResult, result);
-        
+
         instance = new TitleExtractor();
-        fileNamePathWithExtension = "D:\\bonn\\courses\\"
-                + "labEnterpriseInformationSystems\\research\\springerFormat\\"
-                + "splnproc1703\\"
-                + "splnproc1703.pdf";                
+        fileNamePathWithExtension = "src\\test\\java\\com\\unibonn\\pdf2rdf\\" +
+                "splnproc1703.pdf";
         expResult = "Contribution Title";
         instance.setFileNamePathWithExtension(fileNamePathWithExtension);
         result = instance.getTitleAsString();
-        
+
         assertEquals(expResult, result);
-        
+
     }
 }
